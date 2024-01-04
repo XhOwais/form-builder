@@ -1,6 +1,11 @@
 'use client'
+import { Designer } from '@/components/designer/page'
+import DragOverlyWrapper from '@/components/dragoverly.tsx/page'
+import { FormElements } from '@/components/form-elements/page'
+import SidebarBtnElement from '@/components/sideBarElementBtn/page'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { DndContext } from '@dnd-kit/core'
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
 import { Eye, GripHorizontal, Pencil, Plus, Share2 } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react'
@@ -13,7 +18,8 @@ export default function Home() {
     const { data: session } = useSession();
 
     return (
-        <main className="flex overflow-hidden">
+        <DndContext>
+            <main className="flex overflow-hidden">
             <div className=' w-full h-screen bg-black opacity-40  grid'>
                 <Card className=" fixed flex px-2 items-center gap-4 top-10 left-4 w-[180px] h-[60px] place-self-center rounded-full">
                     <Avatar className='  w-12'>
@@ -26,9 +32,7 @@ export default function Home() {
                     <Share2 />
                     </div>
                 </Card>
-                <Card className="w-[600px] h-[300px] place-self-center">
-
-                </Card>
+                <Designer/>
             </div>
             <aside id="default-sidebar" className=" w-[450px] h-screen transition-transform -translate-x-full  sm:translate-x-0" aria-label="Sidebar">
 
@@ -53,6 +57,7 @@ export default function Home() {
                         </h2>
                     </span>
                     <ul className=" font-medium grid grid-cols-1 grid-flow-row gap-x-2 gap-y-4 ">
+                        <SidebarBtnElement  formElement={FormElements.TextField}/>
                         <a
                             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
                             className="group flex items-center gap-4 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
@@ -133,5 +138,7 @@ export default function Home() {
                 </div>
             </aside>
         </main>
+        <DragOverlyWrapper/>
+        </DndContext>
     )
 }

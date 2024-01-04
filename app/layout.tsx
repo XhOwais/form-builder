@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { SessionProviders } from '@/components/session-provider/page'
+import DesignerContextProvder from '@/components/context/DesignerContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,9 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <DesignerContextProvder>
         <SessionProviders>
         {children}
         </SessionProviders>
+        </DesignerContextProvder>
       </body>
     </html>
   )
