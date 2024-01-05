@@ -1,20 +1,20 @@
 "use client"
 
 import { ElementsType, FormElement, FormElementInstance } from "@/types/form"
-import { MdTextFields } from 'react-icons/md'
+import { MdTextFields } from 'react-icons/md';
+import { TbNumbers } from "react-icons/tb";
 import { Input } from "../ui/input";
-import { Settings } from "lucide-react";
 import { DialogDemo } from "../dialog/page";
 
-const type: ElementsType = "TextField";
-
+const type: ElementsType = "NumField";
 const extraAttributes = {
-    label: "Text Field",
+    label: "Num Field",
     helperText: "Helper text",
     required: true,
     placeHolder: "Values here..."
 }
-export const TextFieldFormElement: FormElement = {
+
+export const NumFieldFormElement: FormElement = {
     type,
 
     construct: (id: string) => ({
@@ -23,15 +23,15 @@ export const TextFieldFormElement: FormElement = {
         extraAttributes,
     }),
     designerBtnElement: {
-        icon: MdTextFields,
-        label: "Text Field"
+        icon: TbNumbers,
+        label: "Num Field"
     },
     designerComponent: designerComponent,
     formComponent: () => <div>Form Component</div>,
     propertiesComponent: () => <div>Properties Component</div>,
 }
 
-export type CustomInstance = FormElementInstance & {
+type CustomInstance = FormElementInstance & {
     extraAttributes: typeof extraAttributes;
 }
 
@@ -52,7 +52,7 @@ function designerComponent({
                     <DialogDemo element={element}  />
                 </h2>
             </div>
-            <Input className=" text-black o-100 font-semibold" placeholder={placeHolder} />
+            <Input type="number" className=" text-black o-100 font-semibold" placeholder={placeHolder} />
         </div>
     )
 }

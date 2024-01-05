@@ -74,3 +74,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.o-100{
+  opacity: 100 !important;
+  color: black;
+}
+.o-40{
+  opacity: 60;
+}

@@ -4,7 +4,9 @@ export type SignValues = {
     password: string;
 }
 
-export type ElementsType = "TextField";
+export type ElementsType = 
+"TextField"
+| "NumField";
 
 export type FormElement = {
 

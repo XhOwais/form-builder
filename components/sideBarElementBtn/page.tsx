@@ -34,9 +34,9 @@ export default function SidebarBtnElement(
                     <h2 className={` mb-1 text-md font-semibold`}>
                         {label}
                     </h2>
-                    <p className={`m-0 max-w-[30ch] text-xs opacity-50`}>
+                    {/* <p className={`m-0 max-w-[30ch] text-xs opacity-50`}>
                         Find in-depth information about Next.js
-                    </p>
+                    </p> */}
                 </span>
             </div>
         </>
@@ -57,16 +57,16 @@ export  function SidebarBtnElementDragOverly(
     return (
         <>
             <div
-                className="group flex items-center gap-4 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+                className="group cursor-grab flex items-center gap-4 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 rotate-12"
             >
                 <Icon/>
                 <span>
                     <h2 className={` mb-1 text-md font-semibold`}>
                         {label}
                     </h2>
-                    <p className={`m-0 max-w-[30ch] text-xs opacity-50`}>
+                    {/* <p className={`m-0 max-w-[30ch] text-xs opacity-50`}>
                         Find in-depth information about Next.js
-                    </p>
+                    </p> */}
                 </span>
             </div>
         </>
