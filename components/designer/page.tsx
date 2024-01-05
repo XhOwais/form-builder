@@ -43,10 +43,10 @@ export const Designer = () => {
       droppable.isOver && elements.length === 0 && "opacity-80 border w-[620px] min-h-[330px]  ", droppable.isOver && elements.length > 0 && "w-[620px] min-h-[330px]")}>
       {elements.length > 0 && (
         elements.toReversed().map(element => (
-          <div className=' flex items-center justify-between gap-4'>
+          <div className=' flex items-center justify-between gap-4'  key={element.id}>
             <GripHorizontal className=' cursor-grab' />
             <div className=' w-full'>
-              <DesignerElementWrapper element={element} key={element.id} />
+              <DesignerElementWrapper element={element} />
             </div>
             <Trash2 onClick={()=> {
               removeElement(element.id)
