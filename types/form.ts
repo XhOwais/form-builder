@@ -6,7 +6,8 @@ export type SignValues = {
 
 export type ElementsType =
     "TextField"
-    | "NumField";
+    | "NumField"
+    | "TextAreaField";
 
 export type FormElement = {
 
