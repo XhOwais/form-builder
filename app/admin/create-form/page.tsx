@@ -2,6 +2,8 @@
 import { Designer } from '@/components/designer/page'
 import DragOverlyWrapper from '@/components/dragoverly.tsx/page'
 import { FormElements } from '@/components/form-elements/page'
+import { FormPreview } from '@/components/form-preview/page'
+import useDesigner from '@/components/hooks/useDesigner'
 import SidebarBtnElement from '@/components/sideBarElementBtn/page'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -16,6 +18,8 @@ import { useRouter } from 'next/navigation'
 export default function Home() {
 
     const { data: session } = useSession();
+    const {elements} = useDesigner();
+
 
     return (
         <DndContext>
@@ -113,9 +117,7 @@ export default function Home() {
                         {/* </div> */}
                     </ul>
                     <div className=' w-full h-10 fixed bottom-4 flex justify-end  px-12 gap-4'>
-                        <Button variant={"link"}>
-                            Preview
-                        </Button>
+                        <FormPreview/>
                         <Button variant={"ghost"}>
                             Save
                         </Button>

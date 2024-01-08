@@ -4,9 +4,9 @@ export type SignValues = {
     password: string;
 }
 
-export type ElementsType = 
-"TextField"
-| "NumField";
+export type ElementsType =
+    "TextField"
+    | "NumField";
 
 export type FormElement = {
 
@@ -20,10 +20,18 @@ export type FormElement = {
     designerComponent: React.FC<{
         elementInstance: FormElementInstance
     }>;
-    formComponent: React.FC;
+    formComponent: React.FC<{
+        elementInstance: FormElementInstance;
+      }>;
     propertiesComponent: React.FC;
 }
 
+export type FieldType = {
+    label: string;
+    placeHolder: string;
+    helperText: string;
+    required: boolean;
+}
 export type FormElementInstance = {
     id: string;
     type: ElementsType;

@@ -5,6 +5,8 @@ import { MdTextFields } from 'react-icons/md';
 import { TbNumbers } from "react-icons/tb";
 import { Input } from "../ui/input";
 import { DialogDemo } from "../dialog/page";
+import { Label } from "../ui/label";
+import { cn } from "@/lib/utils";
 
 const type: ElementsType = "NumField";
 const extraAttributes = {
@@ -27,7 +29,7 @@ export const NumFieldFormElement: FormElement = {
         label: "Num Field"
     },
     designerComponent: designerComponent,
-    formComponent: () => <div>Form Component</div>,
+    formComponent: formComponent,
     propertiesComponent: () => <div>Properties Component</div>,
 }
 
@@ -54,5 +56,25 @@ function designerComponent({
             </div>
             <Input type="number" className=" text-black o-100 font-semibold" placeholder={placeHolder} />
         </div>
+    )
+}
+
+function formComponent({
+    elementInstance
+}: { elementInstance: FormElementInstance }) {
+    const element = elementInstance as CustomInstance;
+    const {label, placeHolder, required, helperText} = element.extraAttributes;
+    return (
+        <div className="flex flex-col gap-2 w-full">
+      <Label className={cn("")}>
+        {label}
+        {required && "*"}
+      </Label>
+      <Input
+        className={cn("")}
+        placeholder={placeHolder}
+      />
+      {/* {helperText && <p className={cn("text-muted-foreground text-[0.8rem]","text-red-500")}>{helperText}</p>} */}
+    </div>
     )
 }

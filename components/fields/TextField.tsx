@@ -5,6 +5,9 @@ import { MdTextFields } from 'react-icons/md'
 import { Input } from "../ui/input";
 import { Settings } from "lucide-react";
 import { DialogDemo } from "../dialog/page";
+import { FormPreview } from "../form-preview/page";
+import { Label } from "../ui/label";
+import { cn } from "@/lib/utils";
 
 const type: ElementsType = "TextField";
 
@@ -27,7 +30,7 @@ export const TextFieldFormElement: FormElement = {
         label: "Text Field"
     },
     designerComponent: designerComponent,
-    formComponent: () => <div>Form Component</div>,
+    formComponent: formComponent,
     propertiesComponent: () => <div>Properties Component</div>,
 }
 
@@ -54,5 +57,25 @@ function designerComponent({
             </div>
             <Input className=" text-black o-100 font-semibold" placeholder={placeHolder} />
         </div>
+    )
+}
+
+function formComponent({
+    elementInstance
+}: { elementInstance: FormElementInstance }) {
+    const element = elementInstance as CustomInstance;
+    const {label, placeHolder, required, helperText} = element.extraAttributes;
+    return (
+        <div className="flex flex-col gap-2 w-full">
+      <Label className={cn("")}>
+        {label}
+        {required && "*"}
+      </Label>
+      <Input
+        className={cn("")}
+        placeholder={placeHolder}
+      />
+      {/* {helperText && <p className={cn("text-muted-foreground text-[0.8rem]","text-red-500")}>{helperText}</p>} */}
+    </div>
     )
 }

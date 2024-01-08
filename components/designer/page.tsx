@@ -10,13 +10,13 @@ import { GripHorizontal, Trash2 } from 'lucide-react'
 
 export const Designer = () => {
 
-  const { elements, addElement, removeElement } = useDesigner();
+  const { elements, addElement } = useDesigner();
   const droppable = useDroppable({
     id: "designer-drop-area",
     data: {
       isDesifnerDropAre: true,
     }
-  })
+  });
   useDndMonitor({
     onDragEnd(event) {
       const { active, over } = event;
@@ -31,30 +31,21 @@ export const Designer = () => {
           idGenerator()
         )
         console.log("new Element", newElement)
-        addElement(0, newElement)
+        addElement(elements.length, newElement)
       }
       console.log("Drag End", event)
     },
   })
-
   console.log(elements)
   return (
     <Card ref={droppable.setNodeRef} className={cn(" transition-all w-[600px] px-4 py-4 min-h-[330px] place-self-center",
       droppable.isOver && elements.length === 0 && "opacity-80 border w-[620px] min-h-[330px]  ", droppable.isOver && elements.length > 0 && "w-[620px] min-h-[330px]")}>
       {elements.length > 0 && (
-        elements.toReversed().map(element => (
-          <div className=' flex items-center justify-between gap-4'  key={element.id}>
-            <GripHorizontal className=' cursor-grab' />
-            <div className=' w-full'>
-              <DesignerElementWrapper element={element} />
-            </div>
-            <Trash2 onClick={()=> {
-              removeElement(element.id)
-            }} />
-          </div>
+        elements.map(element => (
+          <DesignerElementWrapper key={element.id} element={element} />
         ))
       )}
-      {droppable.isOver && (
+      {droppable.isOver &&  (
         <div className=' w-full  h-20 rounded-lg bg-black mt-4'></div>
       )}
     </Card>
@@ -65,6 +56,15 @@ function DesignerElementWrapper(
   { element }: { element: FormElementInstance }
 ) {
 
+  const { removeElement } = useDesigner()
+  const draggable = useDraggable({
+    id: element.id + "-drag-handler",
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isDesignerElement: true
+    }
+  })
   const topHalf = useDroppable({
     id: element.id + "-top",
     data: {
@@ -85,11 +85,30 @@ function DesignerElementWrapper(
 
 
   const DesignerElement = FormElements[element.type].designerComponent;
+
+  if (draggable.isDragging) return null;
   return (
-    <div>
-      {/* <div className=' w-full h-6 rounded-md bg-slate-200'></div> */}
-      <DesignerElement elementInstance={element} />
-      {/* <div className=' w-full h-6 rounded-md bg-slate-200'></div> */}
+    <div className='flex items-center justify-between gap-4 relative'>
+      <div
+        className=''
+        // ref={draggable.setNodeRef}
+        // {...draggable.listeners}
+        // {...draggable.attributes}
+        >
+        {/* <div ref={topHalf.setNodeRef} className="absolute w-full top-0 h-1/2 rounded-t-md" /> */}
+        {/* <div ref={halfBottom.setNodeRef} className="absolute bottom-0  w-full h-1/2 rounded-b-md" /> */}
+        <GripHorizontal className=' cursor-grab' />
+      </div>
+      <div className=' w-full'>
+        <div>
+          {/* {topHalf.isOver && <div className=' w-full h-6 rounded-md bg-slate-200'></div>  } */}
+          <DesignerElement elementInstance={element} />
+          {/* {halfBottom.isOver && <div className=' w-full h-6 rounded-md bg-slate-200 mb-2'></div>} */}
+        </div>
+      </div>
+      <Trash2 onClick={() => {
+        removeElement(element.id)
+      }} />
     </div>
   );
 }
