@@ -8,3 +8,10 @@ export const propertiesSchema = z.object({
   });
 
 export type TFIeldPropSchema = z.infer<typeof propertiesSchema>
+
+export const FormCreatetiesSchema = z.object({
+  name: z.string().min(4, "name must have than 4 characters"),
+  discription: z.string().optional()
+})
+
+export type TFormCreatetiesSchema = z.infer<typeof FormCreatetiesSchema>

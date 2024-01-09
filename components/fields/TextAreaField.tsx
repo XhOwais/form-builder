@@ -4,7 +4,7 @@ import { ElementsType, FormElement, FormElementInstance } from "@/types/form"
 import { BsTextareaResize } from "react-icons/bs";
 import { Textarea } from "../ui/textarea";
 import { Settings } from "lucide-react";
-import { DialogDemo } from "../dialog/page";
+import { DialogDemo } from "../dialog/DialogDemo";
 import { FormPreview } from "../form-preview/page";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";

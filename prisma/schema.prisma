@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
@@ -17,6 +18,8 @@ model User {
   image    String?
   password String
 
+  form Form[]
+
   @@index([id])
   @@map(name: "users")
 }
@@ -24,17 +27,20 @@ model User {
 model Form {
   id          Int      @id @default(autoincrement())
   userId      Int
+  User        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   publish     Boolean  @default(false)
   name        String
   discription String   @default("")
-  content     String   @default("[]")
+  content     String @db.LongText 
 
   visitors   Int @default(0)
   submission Int @default(0)
 
   FormSubmission FormSubmission[]
   shareUrl       String           @default(uuid())
+
+  @@index([userId])
 }
 
 model FormSubmission {
@@ -44,4 +50,6 @@ model FormSubmission {
   form      Form     @relation(fields: [formId], references: [id])
 
   content String @default("[]")
+
+  @@index([formId])
 }

@@ -35,8 +35,7 @@ export const Designer = () => {
       }
       console.log("Drag End", event)
     },
-  })
-  console.log(elements)
+  });
   return (
     <Card ref={droppable.setNodeRef} className={cn(" transition-all w-[600px] px-4 py-4 min-h-[330px] place-self-center",
       droppable.isOver && elements.length === 0 && "opacity-80 border w-[620px] min-h-[330px]  ", droppable.isOver && elements.length > 0 && "w-[620px] min-h-[330px]")}>

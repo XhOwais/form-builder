@@ -23,7 +23,7 @@ export type FormElement = {
     }>;
     formComponent: React.FC<{
         elementInstance: FormElementInstance;
-      }>;
+    }>;
     propertiesComponent: React.FC;
 }
 
@@ -42,3 +42,16 @@ export type FormElemetsType = {
     [key in ElementsType]: FormElement
 };
 
+export type Forms =
+    {
+        id: number;
+        userId: number;
+        createdAt: Date;
+        publish: boolean;
+        name: string;
+        discription: string;
+        content: string;
+        visitors: number;
+        submission: number;
+        shareUrl: string;
+    }[]

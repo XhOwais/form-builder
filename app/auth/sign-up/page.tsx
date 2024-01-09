@@ -28,7 +28,7 @@ export default function Component() {
     });
 
     const { register, handleSubmit, formState } = form;
-    const { errors } = formState;
+    const {errors, isSubmitting} = formState;
 
     const handleSingIn = async(data: SignValues)=> {
         try{
@@ -76,7 +76,7 @@ export default function Component() {
                         </div>
                         <p className="error">{errors.password?.message}</p>
                         {signInError? signInError : ''}
-                        <Button className="w-full" type="submit">
+                        <Button disabled={isSubmitting} className="w-full" type="submit">
                             Sign Up
                         </Button>
                     </div>

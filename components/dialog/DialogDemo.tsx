@@ -35,7 +35,7 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
   });
 
   const { register, handleSubmit, formState } = form;
-  const { errors } = formState;
+  const { errors,isSubmitting } = formState;
   const { updateElement } = useDesigner();
 
   function update(values: TFIeldPropSchema) {
@@ -100,7 +100,7 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
             </div>
           </div>
           <DialogTrigger className=" float-end">
-            <Button type="submit">Save changes</Button>
+            <Button disabled={isSubmitting} type="submit">Save changes</Button>
           </DialogTrigger>
         </DialogContent>
       </form>

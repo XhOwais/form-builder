@@ -4,7 +4,7 @@ import { ElementsType, FormElement, FormElementInstance } from "@/types/form"
 import { MdTextFields } from 'react-icons/md';
 import { TbNumbers } from "react-icons/tb";
 import { Input } from "../ui/input";
-import { DialogDemo } from "../dialog/page";
+import { DialogDemo } from "../dialog/DialogDemo";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
 

@@ -4,7 +4,7 @@ import { ElementsType, FormElement, FormElementInstance } from "@/types/form"
 import { MdTextFields } from 'react-icons/md'
 import { Input } from "../ui/input";
 import { Settings } from "lucide-react";
-import { DialogDemo } from "../dialog/page";
+import { DialogDemo } from "../dialog/DialogDemo";
 import { FormPreview } from "../form-preview/page";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
