@@ -43,16 +43,16 @@ function designerComponent({
 }: { elementInstance: FormElementInstance }) {
 
     const element = elementInstance as CustomInstance;
-    const {label, placeHolder, required, helperText} = element.extraAttributes;
+    const { label, placeHolder, required, helperText } = element.extraAttributes;
     return (
         <div className="w-full h-auto flex flex-col gap-3 justify-between rounded-lg  mb-3 text-white o-100">
             <div className="w-full h-8 text-black rounded-t-lg px-1 pt-1">
                 <h2 className={` mb-1 text-md font-semibold flex justify-between`}>
                     <div>
-                    {label}
-                    {required && " *"}
+                        {label}
+                        {required && " *"}
                     </div>
-                    <DialogDemo element={element}  />
+                    <DialogDemo element={element} />
                 </h2>
             </div>
             <Textarea className=" text-black o-100 font-semibold" placeholder={placeHolder} />
@@ -61,21 +61,24 @@ function designerComponent({
 }
 
 function formComponent({
-    elementInstance
-}: { elementInstance: FormElementInstance }) {
+    elementInstance,
+    register
+}: { elementInstance: FormElementInstance;
+    register: any }) {
     const element = elementInstance as CustomInstance;
-    const {label, placeHolder, required, helperText} = element.extraAttributes;
+    const { label, placeHolder, required, helperText } = element.extraAttributes;
     return (
-        <div className="flex flex-col gap-2 w-full">
-      <Label className={cn("")}>
-        {label}
-        {required && "*"}
-      </Label>
-      <Textarea 
-        className={cn("")}
-        placeholder={placeHolder}
-      />
-      {/* {helperText && <p className={cn("text-muted-foreground text-[0.8rem]","text-red-500")}>{helperText}</p>} */}
-    </div>
+        <div className="flex flex-col gap-2 w-full mb-4">
+            <Label className={cn("")}>
+                {label}
+                {required && "*"}
+            </Label>
+            <Textarea
+                {...register(`${label}`)}
+                className={cn("")}
+                placeholder={placeHolder}
+            />
+            {/* {helperText && <p className={cn("text-muted-foreground text-[0.8rem]","text-red-500")}>{helperText}</p>} */}
+        </div>
     )
 }

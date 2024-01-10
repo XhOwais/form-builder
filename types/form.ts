@@ -1,3 +1,5 @@
+import { UseFormRegister } from "react-hook-form";
+
 export type SignValues = {
     username: string;
     email: string;
@@ -19,10 +21,11 @@ export type FormElement = {
         label: string;
     };
     designerComponent: React.FC<{
-        elementInstance: FormElementInstance
+        elementInstance: FormElementInstance;
     }>;
     formComponent: React.FC<{
         elementInstance: FormElementInstance;
+        register: any
     }>;
     propertiesComponent: React.FC;
 }
@@ -42,7 +45,7 @@ export type FormElemetsType = {
     [key in ElementsType]: FormElement
 };
 
-export type Forms =
+export type Form =
     {
         id: number;
         userId: number;
@@ -54,4 +57,7 @@ export type Forms =
         visitors: number;
         submission: number;
         shareUrl: string;
-    }[]
+    }
+export type Forms =
+    Form[]
+    

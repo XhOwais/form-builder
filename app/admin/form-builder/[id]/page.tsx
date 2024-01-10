@@ -1,5 +1,6 @@
 'use client'
 import { GetFormById } from '@/actions/form'
+import { Form } from '@/types/form'
 import { Designer } from '@/components/designer/page'
 import DragOverlyWrapper from '@/components/dragoverly.tsx/page'
 import { FormElements } from '@/components/form-elements/page'
@@ -15,15 +16,39 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import useDesigner from '@/components/hooks/useDesigner'
+import { FaSpinner } from 'react-icons/fa'
 
 export default function Home(params: any) {
 
     const { data: session } = useSession();
-    if(!session?.user) return;
-   
-
+    const [data, setData] = useState<Form | null>();
+    const [loading, setLoading] = useState<boolean>(false);
+    const {setElements} = useDesigner();
+    useEffect(()=>{
+        setLoading(true)
+        const formId = params.params.id.replace(/\D/g, '');
+        const formData = async()=>{
+            const res = await GetFormById(parseInt(formId))
+            if(res?.content){
+                const elementsData = await JSON.parse(res?.content)
+            setElements(elementsData)
+            } else {
+                setElements([])
+            }
+            setData(res)
+            setLoading(false)
+        }
+        formData();
+    },[params.params.id.endsWith('edit')])
+    
+    if (!session?.user) return;
+    console.log(data)
     return (
-        <DndContext>
+        <div>
+        {loading? (<div className=' w-full h-[100vh] flex justify-center items-center'><FaSpinner className="animate-spin" /></div>):(
+            <DndContext>
             <main className="flex overflow-hidden">
                 <div className=' w-full h-screen relative bg-opacity-40 grid bg-60' >
                     <Card className=" fixed flex px-2 items-center gap-4 top-10 left-4 w-[180px] h-[60px] place-self-center rounded-full">
@@ -37,7 +62,7 @@ export default function Home(params: any) {
                             <Share2 />
                         </div>
                     </Card>
-                    <Designer />
+                    <Designer data={data} />
                     <div className=' absolute top-0 z-[-1] opacity-60 w-full h-full  bg-[url(/polka-dots.svg)] '>
 
                     </div>
@@ -50,7 +75,7 @@ export default function Home(params: any) {
                     <div className=' w-full h-32 bg-gray-50  border-b'>
                         <div className=' px-8 pt-8'>
                             <h2 className='pb-2 font-bold w-full flex justify-between'>
-                                Contact Form
+                                {data?.name}
                                 <span>
                                     <Pencil className=' w-8' />
                                 </span>
@@ -104,13 +129,15 @@ export default function Home(params: any) {
                         </ul>
                         <div className=' w-full h-10 fixed bottom-4 flex justify-end  px-12 gap-4'>
                             <FormPreview />
-                             <SaveFormBtn type={"Save"} publish={false} id={parseInt(session?.user.id)} formId={parseInt(params.params.id)} />
-                             <SaveFormBtn type={"Publish"} publish={true} id={parseInt(session?.user.id)} formId={parseInt(params.params.id)} />
+                            <SaveFormBtn type={"Save"} publish={false} id={parseInt(session?.user.id)} formId={parseInt(params.params.id)} />
+                            <SaveFormBtn type={"Publish"} publish={true} id={parseInt(session?.user.id)} formId={parseInt(params.params.id)} />
                         </div>
                     </div>
                 </aside>
             </main>
             <DragOverlyWrapper />
         </DndContext>
+        )}
+        </div>
     )
 }

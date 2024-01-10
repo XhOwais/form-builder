@@ -1,5 +1,5 @@
 'use client'
-import { GetUserForm } from '@/actions/form'
+import { GetUserForm, FormDelete } from '@/actions/form'
 import { CreateFormPopup } from '@/components/createFormPopup/page'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,25 +11,50 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { MdPublishedWithChanges } from "react-icons/md";
 import { RiDraftFill } from "react-icons/ri";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaSpinner } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
+import { HiCursorClick } from "react-icons/hi";
+import { TbArrowBounce } from "react-icons/tb";
+import { FaEye } from "react-icons/fa";
 
 
 export default function Admin() {
 
   const { data: session } = useSession();
   const [publishedForm, setPublishedForm] = useState<Forms>()
-
+  const [draftedForm, setDraftedForm] = useState<Forms>()
+  const [loading, setLoading] = useState<number | null>()
+  const router = useRouter()
+  
   useEffect(() => {
     const Published = async () => {
-      const data = await GetUserForm(2, false);
+      const data = await GetUserForm(2, true);
       setPublishedForm(data)
     }
     Published()
+    const Drafted = async () => {
+      const data = await GetUserForm(2, false);
+      setDraftedForm(data)
+    }
+    Drafted()
     console.log(publishedForm)
   }, [session?.user.id]);
   if (!session?.user) return;
 
+  const edit = (id: number)=>{
+    router.push(`/admin/form-builder/${id}edit`)
+  }
+  const deleteForm = async (id: number, userId: string, publish: boolean) => {
+    setLoading(id)
+    const res = await FormDelete(id, parseInt(userId), publish);
+    if (publish) {
+      setPublishedForm(res)
+      setLoading(null)
+    } else {
+      setDraftedForm(res)
+    }
+    setLoading(null)
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between py-24 px-12">
@@ -122,15 +147,38 @@ export default function Admin() {
             {publishedForm?.slice(0, 3).map((forms) => (
               <Card className=' w-full h-20 bg-[#000000ba] flex justify-between' key={forms.id}>
                 <CardHeader>
-                  <CardTitle className=' text-white'>Published Forms</CardTitle>
+                  <CardTitle className=' text-white'>{forms.name}</CardTitle>
                   <CardDescription className=' text-slate-200'>Deploy your new project in one-click.</CardDescription>
                 </CardHeader>
+                <div>
+
+                </div>
                 <div className='h-full flex items-center gap-4 pr-4'>
-                  <Button variant={"default"} className=' flex gap-2'>
-                    Edit <FaEdit />
+                  <div className=' flex items-center gap-4'>
+                    <div className=' flex items-center gap-4'>
+                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
+                      <HiCursorClick className="text-white" />
+                    </div>
+                    <div className=' flex items-center gap-4'>
+                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
+                      <TbArrowBounce className="text-white" />
+                    </div>
+                    <div className=' flex items-center gap-4'>
+                      {/* <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card> */}
+                      <FaEye onClick={()=>{
+                        router.push(`/${forms.shareUrl}`)
+                      }} className="text-white size-7 hover:text-green-700" />
+                    </div>
+                  </div>
+                  <Button onClick={()=>{
+                    edit(forms.id)
+                  }} variant={"default"} className=' flex gap-2'>
+                    Edit  <FaEdit />
                   </Button>
-                  <Button variant={"destructive"} className=' flex gap-2'>
-                    Delete <MdDeleteForever />
+                  <Button disabled={loading == forms.id} onClick={() => {
+                    deleteForm(forms.id, session.user.id, forms.publish)
+                  }} variant={"destructive"} className=' flex gap-2'>
+                    Delete {loading == forms.id?  <FaSpinner className="animate-spin" /> : <MdDeleteForever/>}
                   </Button>
                 </div>
               </Card>
@@ -147,18 +195,38 @@ export default function Admin() {
             <CardDescription>Deploy your new project in one-click.</CardDescription>
           </CardHeader>
           <div className=' px-4 flex flex-col justify-center gap-3'>
-            {publishedForm?.slice(0, 3).map((forms) => (
+            {draftedForm?.slice(0, 3).map((forms) => (
               <Card className=' w-full h-20 bg-[#000000ba] flex justify-between' key={forms.id}>
                 <CardHeader>
-                  <CardTitle className=' text-white'>Published Forms</CardTitle>
+                  <CardTitle className=' text-white'>{forms.name}</CardTitle>
                   <CardDescription className=' text-slate-200'>Deploy your new project in one-click.</CardDescription>
                 </CardHeader>
                 <div className='h-full flex items-center gap-4 pr-4'>
-                  <Button variant={"default"} className=' flex gap-2'>
-                    Edit <FaEdit />
+                  <div className=' flex items-center gap-4'>
+                    <div className=' flex items-center gap-4'>
+                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
+                      <HiCursorClick className="text-white" />
+                    </div>
+                    <div className=' flex items-center gap-4'>
+                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
+                      <TbArrowBounce className="text-white" />
+                    </div>
+                    <div className=' flex items-center gap-4'>
+                      {/* <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card> */}
+                      <FaEye onClick={()=>{
+                        router.push(`/${forms.shareUrl}`)
+                      }} className="text-white size-7 hover:text-green-700" />
+                    </div>
+                  </div>
+                  <Button onClick={()=>{
+                    edit(forms.id)
+                  }} variant={"default"} className=' flex gap-2'>
+                    Edit  <FaEdit />
                   </Button>
-                  <Button variant={"destructive"} className=' flex gap-2'>
-                    Delete <MdDeleteForever />
+                  <Button onClick={() => {
+                    deleteForm(forms.id, session.user.id, forms.publish)
+                  }} variant={"destructive"} className=' flex gap-2'>
+                    Delete {loading == forms.id?   <FaSpinner className="animate-spin" /> : <MdDeleteForever/>}
                   </Button>
                 </div>
               </Card>
@@ -168,9 +236,9 @@ export default function Admin() {
 
       </div>
 
-            
+
       <div className=' flex gap-3'>
-        <CreateFormPopup/>
+        <CreateFormPopup />
       </div>
     </main>
   )

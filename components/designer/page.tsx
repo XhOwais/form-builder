@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { Card } from '../ui/card'
 import { useDndMonitor, useDraggable, useDroppable } from '@dnd-kit/core'
 import { cn } from '@/lib/utils'
-import { ElementsType, FormElementInstance } from '@/types/form'
+import { ElementsType, Form, FormElementInstance } from '@/types/form'
 import useDesigner from '../hooks/useDesigner'
 import { FormElements } from '../form-elements/page'
 import { idGenerator } from '@/lib/idGenertor'
 import { GripHorizontal, Trash2 } from 'lucide-react'
 
-export const Designer = () => {
+export const Designer = ({data}:{data: Form | null | undefined}) => {
 
   const { elements, addElement } = useDesigner();
   const droppable = useDroppable({
@@ -24,6 +24,7 @@ export const Designer = () => {
 
       const isDesignerBtnElement = active.data.current?.isDesignerElementBtn;
       console.log(isDesignerBtnElement)
+       
 
       if (isDesignerBtnElement) {
         const type = active.data?.current?.type;

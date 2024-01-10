@@ -1,13 +1,14 @@
 "use client"
 
 import { FormElementInstance } from "@/types/form"
-import { ReactNode, createContext, useState } from "react";
+import { Dispatch, ReactNode, SetStateAction, createContext, useState } from "react";
 
 type DesignerContextType = {
     elements: FormElementInstance[];
     addElement: (index: number, element: FormElementInstance)=> void;
     removeElement: (id: string) => void;
     updateElement: (id: string, element: FormElementInstance) => void;
+    setElements: Dispatch<SetStateAction<FormElementInstance[]>>;
 }
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -39,5 +40,6 @@ export default function DesignerContextProvider({ children }: { children: ReactN
         addElement,
         removeElement,
         updateElement,
+        setElements
     }}>{children}</DesignerContext.Provider>
 }

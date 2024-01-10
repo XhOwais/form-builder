@@ -14,10 +14,18 @@ import { FormElementInstance } from "@/types/form";
 import { CustomInstance } from "../fields/TextField";
 import useDesigner from "../hooks/useDesigner";
 import { FormElements } from "../form-elements/page";
+import { useForm } from "react-hook-form";
 
 export function FormPreview() {
     const { elements } = useDesigner();
-
+    const combinedObject = elements.reduce((acc, element) => {
+      acc[element.extraAttributes?.label] = "";
+      return acc;
+    }, {});
+    const form = useForm({
+      defaultValues: combinedObject
+    })
+    const {register, handleSubmit, formState} = form;
   return (
     <Dialog>
     <DialogTrigger asChild>
@@ -34,7 +42,7 @@ export function FormPreview() {
         <div className="max-w-[620px] flex flex-col gap-4 flex-grow bg-background h-full w-full rounded-2xl p-8 overflow-y-auto">
           {elements.map((element) => {
             const FormComponent = FormElements[element.type].formComponent;
-            return <FormComponent key={element.id} elementInstance={element} />;
+            return <FormComponent key={element.id} elementInstance={element} register={register} />;
           })}
         </div>
       </div>

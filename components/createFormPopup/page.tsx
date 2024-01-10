@@ -18,6 +18,7 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useToast } from "../ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { FaSpinner } from "react-icons/fa"
 
 export function CreateFormPopup() {
 
@@ -43,7 +44,7 @@ export function CreateFormPopup() {
           description: "Form created successfully",
         });
         form.reset()
-        router.push(`/admin/create-form/${formId}`);
+        router.push(`/admin/form-builder/${formId}`);
       } catch (error) {
         toast({
           title: "Error",
@@ -82,7 +83,7 @@ export function CreateFormPopup() {
             </div>
           </div>
           <DialogFooter>
-            <Button disabled={isSubmitting} type="submit">Create</Button>
+            <Button disabled={isSubmitting} type="submit">Create {isSubmitting && <FaSpinner className="animate-spin ml-4" />}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

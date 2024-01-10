@@ -2,6 +2,7 @@
 
 import { TFormCreatetiesSchema } from "@/utils/Field-properties";
 import { PrismaClient } from "@prisma/client"
+import { boolean } from "zod";
 
 const prisma = new PrismaClient();
 
@@ -49,7 +50,18 @@ export async function GetFormById(formId: number) {
         },
     })
 
-    return form?.content
+    return form
+}
+
+export async function GetForm(uuid:string) {
+    
+    const form = await prisma.form.findFirst({
+        where: {
+            shareUrl: uuid
+        }
+    })
+    
+    return form
 }
 
 export async function GetUserForm(userId: number, publish: boolean) {
@@ -59,6 +71,20 @@ export async function GetUserForm(userId: number, publish: boolean) {
             userId,
             publish,
         },
+        orderBy: {
+            createdAt: "desc"
+        }
     })
     return forms
+}
+
+export async function FormDelete(id:number, userId: number, publish: boolean) {
+    const forms = await prisma.form.delete({
+        where: {
+            userId,
+            id,
+        },
+    })
+   const formsRetun =    GetUserForm(userId, publish);
+    return formsRetun
 }
