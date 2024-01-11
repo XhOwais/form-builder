@@ -25,14 +25,15 @@ model User {
 }
 
 model Form {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  User        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())
-  publish     Boolean  @default(false)
-  name        String
-  discription String   @default("")
-  content     String @db.LongText 
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  User          User     @relation(fields: [userId], references: [id])
+  createdAt     DateTime @default(now())
+  publish       Boolean  @default(false)
+  name          String
+  discription   String   @default("")
+  content       String   @db.LongText
+  zodValidation Json 
 
   visitors   Int @default(0)
   submission Int @default(0)

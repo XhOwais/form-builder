@@ -1,3 +1,4 @@
+import { FormElementInstance } from "@/types/form";
 import * as z from "zod";
 
 export const propertiesSchema = z.object({
@@ -14,4 +15,11 @@ export const FormCreatetiesSchema = z.object({
   discription: z.string().optional()
 })
 
+// export const generateValidation = (obj: FormElementInstance[])=> {
+//   return (obj.reduce((acc, element) => {
+//     acc[element.extraAttributes?.label] = z.string().email();
+//     return acc;
+//   }, {}))
+// }
+// console.log(generateValidation)
 export type TFormCreatetiesSchema = z.infer<typeof FormCreatetiesSchema>

@@ -31,7 +31,7 @@ export default function Home(params: any) {
         const formId = params.params.id.replace(/\D/g, '');
         const formData = async()=>{
             const res = await GetFormById(parseInt(formId))
-            if(res?.content){
+            if(res?.content){   
                 const elementsData = await JSON.parse(res?.content)
             setElements(elementsData)
             } else {
@@ -42,6 +42,7 @@ export default function Home(params: any) {
         }
         formData();
     },[params.params.id.endsWith('edit')])
+    
     
     if (!session?.user) return;
     console.log(data)

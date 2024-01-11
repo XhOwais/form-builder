@@ -2,11 +2,12 @@
 
 import { TFormCreatetiesSchema } from "@/utils/Field-properties";
 import { PrismaClient } from "@prisma/client"
+import { json } from "stream/consumers";
 import { boolean } from "zod";
 
 const prisma = new PrismaClient();
 
-export async function CreateForm(data: TFormCreatetiesSchema, userId: number) {
+export async function CreateForm(data: TFormCreatetiesSchema, userId: number, zodValidation: any) {
 
     const { name, discription } = data;
 
@@ -15,7 +16,8 @@ export async function CreateForm(data: TFormCreatetiesSchema, userId: number) {
             userId: userId,
             name,
             discription,
-            content: ''
+            content: '',
+            zodValidation: ''
         }
     })
 
@@ -23,7 +25,7 @@ export async function CreateForm(data: TFormCreatetiesSchema, userId: number) {
     return form.id
 }
 
-export async function UpdateForm(content: string, userId: number, formId: number, publish: boolean) {
+export async function UpdateForm(content: string, userId: number, formId: number, publish: boolean, zodSchema: any) {
 
     if (!userId) {
         throw new Error("User Id is required")
@@ -36,6 +38,7 @@ export async function UpdateForm(content: string, userId: number, formId: number
         data: {
             content,
             publish,
+            zodValidation: JSON.stringify(zodSchema)
         }
     })
     console.log(form)
@@ -44,13 +47,17 @@ export async function UpdateForm(content: string, userId: number, formId: number
 
 export async function GetFormById(formId: number) {
     
-    const form = await prisma.form.findUnique({
-        where: {
-            id: formId
-        },
-    })
-
-    return form
+    try{
+        const form = await prisma.form.findUnique({
+            where: {
+                id: formId
+            },
+        })
+    
+        return form
+    } catch(error){
+        return
+    }
 }
 
 export async function GetForm(uuid:string) {
@@ -66,6 +73,7 @@ export async function GetForm(uuid:string) {
 
 export async function GetUserForm(userId: number, publish: boolean) {
 
+   try{
     const forms = await prisma.form.findMany({
         where: {
             userId,
@@ -75,7 +83,13 @@ export async function GetUserForm(userId: number, publish: boolean) {
             createdAt: "desc"
         }
     })
+    if(!forms){
+        return
+    }
     return forms
+   } catch(err){
+    return
+   }
 }
 
 export async function FormDelete(id:number, userId: number, publish: boolean) {

@@ -25,7 +25,7 @@ export type FormElement = {
     }>;
     formComponent: React.FC<{
         elementInstance: FormElementInstance;
-        register: any
+        register: any,
     }>;
     propertiesComponent: React.FC;
 }

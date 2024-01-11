@@ -20,6 +20,7 @@ CREATE TABLE `Form` (
     `name` VARCHAR(191) NOT NULL,
     `discription` VARCHAR(191) NOT NULL DEFAULT '',
     `content` LONGTEXT NOT NULL,
+    `zodValidation` JSON NOT NULL,
     `visitors` INTEGER NOT NULL DEFAULT 0,
     `submission` INTEGER NOT NULL DEFAULT 0,
     `shareUrl` VARCHAR(191) NOT NULL,

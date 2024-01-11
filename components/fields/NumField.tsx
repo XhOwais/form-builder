@@ -13,7 +13,10 @@ const extraAttributes = {
     label: "Num Field",
     helperText: "Helper text",
     required: true,
-    placeHolder: "Values here..."
+    placeHolder: "Values here...",
+    email: false,
+    min: 0,
+    max: 30
 }
 
 export const NumFieldFormElement: FormElement = {
@@ -33,7 +36,7 @@ export const NumFieldFormElement: FormElement = {
     propertiesComponent: () => <div>Properties Component</div>,
 }
 
-type CustomInstance = FormElementInstance & {
+export type CustomInstance = FormElementInstance & {
     extraAttributes: typeof extraAttributes;
 }
 
@@ -74,7 +77,7 @@ function formComponent({
                 {label}
                 {required && "*"}
             </Label>
-            <Input
+            <Input type="number"
                 {...register(`${label}`)}
                 className={cn("")}
                 placeholder={placeHolder}

@@ -24,29 +24,33 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
   const [elemtdata, setElementData] = useState([element.extraAttributes]);
   const [isRequired, setIsRequired] = useState<boolean>(element.extraAttributes.required)
   console.log(elemtdata)
-  const { label, placeHolder, helperText, required } = element.extraAttributes;
-  const form = useForm<TFIeldPropSchema>({
+  const { label, placeHolder, helperText, required, min, max } = element.extraAttributes;
+  const form = useForm<Record<string, any>>({
     defaultValues: {
       label: label,
       placeHolder: placeHolder,
       helperText: helperText,
-      required: required
+      required: required,
+      min,
+      max
     }
   });
 
   const { register, handleSubmit, formState } = form;
-  const { errors,isSubmitting } = formState;
+  const { errors, isSubmitting } = formState;
   const { updateElement } = useDesigner();
 
-  function update(values: TFIeldPropSchema) {
-    const { label, placeHolder, helperText, required } = values;
+  function update(values:  Record<string, any>) {
+    const { label, placeHolder, helperText, required, min, max } = values;
     updateElement(element.id, {
       ...element,
       extraAttributes: {
         label,
         placeHolder,
         helperText,
-        required: isRequired
+        required: isRequired,
+        min,
+        max
       }
     })
   }
@@ -82,19 +86,31 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
               </Label>
               <Input id="username" defaultValue={helperText} className="col-span-3" {...register("helperText")} />
             </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="username" className="text-right">
+                Min
+              </Label>
+              <Input id="username" type="number" defaultValue={min} className="col-span-3" {...register("min")} />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="username" className="text-right">
+                Max
+              </Label>
+              <Input id="username" type="number" defaultValue={max} className="col-span-3" {...register("max")} />
+            </div>
             <div className="flex justify-between">
               <Label htmlFor="username" className="text-right">
                 Required
               </Label>
               <div className="flex items-center justify-between space-x-2">
                 <Switch
-                  defaultChecked={isRequired} 
-                  onCheckedChange={()=>{
+                  defaultChecked={isRequired}
+                  onCheckedChange={() => {
                     setIsRequired(!isRequired)
                   }}
                   id="airplane-mode"
-                  {...register("required")} 
-                />                
+                  {...register("required")}
+                />
                 <Label htmlFor="airplane-mode">Required</Label>
               </div>
             </div>

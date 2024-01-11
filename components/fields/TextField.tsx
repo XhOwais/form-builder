@@ -15,7 +15,10 @@ const extraAttributes = {
     label: "Text Field",
     helperText: "Helper text",
     required: true,
-    placeHolder: "Values here..."
+    placeHolder: "Values here...",
+    email: false,
+    min: 2,
+    max: 4
 }
 export const TextFieldFormElement: FormElement = {
     type,
@@ -31,7 +34,7 @@ export const TextFieldFormElement: FormElement = {
     },
     designerComponent: designerComponent,
     formComponent: formComponent,
-    propertiesComponent: () => <div>Properties Component</div>,
+    propertiesComponent: ()=> <div>div</div>
 }
 
 export type CustomInstance = FormElementInstance & {
@@ -62,7 +65,7 @@ function designerComponent({
 
 function formComponent({
     elementInstance, 
-    register
+    register,
 }: { elementInstance: FormElementInstance;
 register: any}) {
     const element = elementInstance as CustomInstance;
@@ -82,3 +85,6 @@ register: any}) {
     </div>
     )
 }
+
+
+

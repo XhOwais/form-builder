@@ -28,16 +28,15 @@ export default function Admin() {
   
   useEffect(() => {
     const Published = async () => {
-      const data = await GetUserForm(2, true);
+      const data = await GetUserForm(parseInt(session?.user.id as string), true);
       setPublishedForm(data)
     }
     Published()
     const Drafted = async () => {
-      const data = await GetUserForm(2, false);
+      const data = await GetUserForm(parseInt(session?.user.id as string), false);
       setDraftedForm(data)
     }
     Drafted()
-    console.log(publishedForm)
   }, [session?.user.id]);
   if (!session?.user) return;
 
@@ -166,7 +165,7 @@ export default function Admin() {
                     <div className=' flex items-center gap-4'>
                       {/* <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card> */}
                       <FaEye onClick={()=>{
-                        router.push(`/${forms.shareUrl}`)
+                        router.replace(`/${forms.shareUrl}`)
                       }} className="text-white size-7 hover:text-green-700" />
                     </div>
                   </div>
@@ -213,9 +212,10 @@ export default function Admin() {
                     </div>
                     <div className=' flex items-center gap-4'>
                       {/* <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card> */}
-                      <FaEye onClick={()=>{
-                        router.push(`/${forms.shareUrl}`)
-                      }} className="text-white size-7 hover:text-green-700" />
+                      <Link key={forms.id} href={`/${forms.shareUrl}`}>
+                      <FaEye 
+                      className="text-white size-7 hover:text-green-700" />
+                      </Link>
                     </div>
                   </div>
                   <Button onClick={()=>{
