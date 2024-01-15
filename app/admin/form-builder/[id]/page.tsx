@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useDesigner from '@/components/hooks/useDesigner'
 import { FaSpinner } from 'react-icons/fa'
+import ShareButton from '@/components/shareBtn/page'
 
 export default function Home(params: any) {
 
@@ -60,7 +61,8 @@ export default function Home(params: any) {
                             <Plus />
                         </div>
                         <div className='opacity-60'>
-                            <Share2 />
+                            {/* <Share2 /> */}
+                            <ShareButton title='' text='' url={JSON.stringify(data?.id)}/>
                         </div>
                     </Card>
                     <Designer data={data} />
@@ -94,39 +96,7 @@ export default function Home(params: any) {
                             <SidebarBtnElement formElement={FormElements.TextField} />
                             <SidebarBtnElement formElement={FormElements.NumField} />
                             <SidebarBtnElement formElement={FormElements.TextAreaField} />
-                            <a
-                                href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                                className="group rounded-lg flex items-center gap-4 border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <GripHorizontal />
-                                <span>
-                                    <h2 className={` mb-1 text-md font-semibold`}>
-                                        Checkbox
-                                    </h2>
-                                    <p className={`m-0 max-w-[30ch] text-xs opacity-50`}>
-                                        Find in-depth information about Next.js
-                                    </p>
-                                </span>
-                            </a>
-                            <a
-                                href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-                                className="group rounded-lg flex items-center gap-4 border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <GripHorizontal />
-                                <span>
-                                    <h2 className={` mb-1 text-md font-semibold`}>
-                                        Button
-                                    </h2>
-                                    <p className={`m-0 max-w-[30ch] text-xs opacity-50`}>
-                                        Find in-depth information about Next.js
-                                    </p>
-                                </span>
-                            </a>
-                            {/* </div> */}
+                            
                         </ul>
                         <div className=' w-full h-10 fixed bottom-4 flex justify-end  px-12 gap-4'>
                             <FormPreview />

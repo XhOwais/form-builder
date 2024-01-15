@@ -16,7 +16,7 @@ const extraAttributes = {
     placeHolder: "Values here...",
     email: false,
     min: 0,
-    max: 30
+    max: 4
 }
 
 export const NumFieldFormElement: FormElement = {

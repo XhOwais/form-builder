@@ -8,16 +8,22 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SignInFormSchema } from "@/utils/form-validations"
 import { SignValues } from "@/types/form"
-import { signIn } from "next-auth/react"
-import { useState } from "react"
+import { signIn, useSession } from "next-auth/react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { FaSpinner } from "react-icons/fa"
+import Link from "next/link"
 
 
 export default function Component() {
 
     const [signInError, setSignInError] = useState<string>();
+    const {data: session} = useSession();
     const router = useRouter();
 
+    useEffect(()=>{
+        if(session?.user) return router.replace('/admin')
+    },[session?.user])
     const form = useForm<SignValues>({
         defaultValues: {
             username: "",
@@ -77,8 +83,9 @@ export default function Component() {
                         <p className="error">{errors.password?.message}</p>
                         {signInError? signInError : ''}
                         <Button disabled={isSubmitting} className="w-full" type="submit">
-                            Sign In
+                            Sign In {isSubmitting && <FaSpinner className="animate-spin ml-4" />}
                         </Button>
+                        <CardDescription className=" w-full flex justify-center">If you don't have account already so <Link href='/auth/sign-up' className=" font-bold text-blue-950 ml-2" >Sign Up</Link></CardDescription>
                     </div>
                 </CardContent>
             </Card>

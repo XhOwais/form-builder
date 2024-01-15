@@ -17,7 +17,7 @@ const extraAttributes = {
     required: true,
     placeHolder: "Values here...",
     email: false,
-    min: 2,
+    min: 0,
     max: 4
 }
 export const TextAreaField: FormElement = {

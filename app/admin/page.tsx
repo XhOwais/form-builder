@@ -24,8 +24,8 @@ export default function Admin() {
   const [publishedForm, setPublishedForm] = useState<Forms>()
   const [draftedForm, setDraftedForm] = useState<Forms>()
   const [loading, setLoading] = useState<number | null>()
-  const router = useRouter()
-  
+  const router = useRouter();
+
   useEffect(() => {
     const Published = async () => {
       const data = await GetUserForm(parseInt(session?.user.id as string), true);
@@ -40,7 +40,7 @@ export default function Admin() {
   }, [session?.user.id]);
   if (!session?.user) return;
 
-  const edit = (id: number)=>{
+  const edit = (id: number) => {
     router.push(`/admin/form-builder/${id}edit`)
   }
   const deleteForm = async (id: number, userId: string, publish: boolean) => {
@@ -76,7 +76,7 @@ export default function Admin() {
           Sign Out
         </Button>
       </div>
-      <div className=" mb-10 grid items-center gap-2 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+      {/* <div className=" mb-10 grid items-center gap-2 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
         <a
           href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
@@ -132,7 +132,7 @@ export default function Admin() {
         <div className=' flex gap-3'>
           <CreateFormPopup />
         </div>
-      </div>
+      </div> */}
       <div className="w-full flex gap-2 h-[400px]">
         <Card className='w-1/2 flex flex-col  gap-4 h-full'>
           <CardHeader>
@@ -155,21 +155,23 @@ export default function Admin() {
                 <div className='h-full flex items-center gap-4 pr-4'>
                   <div className=' flex items-center gap-4'>
                     <div className=' flex items-center gap-4'>
-                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
+                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'><Link href={`/admin/submission/${forms.id}`}>
+                        {forms.submission}
+                      </Link></Card>
                       <HiCursorClick className="text-white" />
                     </div>
-                    <div className=' flex items-center gap-4'>
-                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
+                    {/* <div className=' flex items-center gap-4'>
+                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>{forms.visitors}</Card>
                       <TbArrowBounce className="text-white" />
-                    </div>
+                    </div> */}
                     <div className=' flex items-center gap-4'>
-                      {/* <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card> */}
-                      <FaEye onClick={()=>{
-                        router.replace(`/${forms.shareUrl}`)
-                      }} className="text-white size-7 hover:text-green-700" />
+                      <Link target={`/${forms.shareUrl}`} href={`/${forms.shareUrl}`}>
+                        <FaEye
+                          className="text-white size-7 hover:text-green-700" />
+                      </Link>
                     </div>
                   </div>
-                  <Button onClick={()=>{
+                  <Button onClick={() => {
                     edit(forms.id)
                   }} variant={"default"} className=' flex gap-2'>
                     Edit  <FaEdit />
@@ -177,7 +179,7 @@ export default function Admin() {
                   <Button disabled={loading == forms.id} onClick={() => {
                     deleteForm(forms.id, session.user.id, forms.publish)
                   }} variant={"destructive"} className=' flex gap-2'>
-                    Delete {loading == forms.id?  <FaSpinner className="animate-spin" /> : <MdDeleteForever/>}
+                    Delete {loading == forms.id ? <FaSpinner className="animate-spin" /> : <MdDeleteForever />}
                   </Button>
                 </div>
               </Card>
@@ -203,22 +205,23 @@ export default function Admin() {
                 <div className='h-full flex items-center gap-4 pr-4'>
                   <div className=' flex items-center gap-4'>
                     <div className=' flex items-center gap-4'>
-                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
+                      <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'><Link href={`/admin/submission/${forms.id}`}>
+                        {forms.submission}
+                      </Link></Card>
                       <HiCursorClick className="text-white" />
                     </div>
-                    <div className=' flex items-center gap-4'>
+                    {/* <div className=' flex items-center gap-4'>
                       <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card>
                       <TbArrowBounce className="text-white" />
-                    </div>
+                    </div> */}
                     <div className=' flex items-center gap-4'>
-                      {/* <Card className=' flex items-center bg-[#0000] justify-center font-extrabold text-white size-4'>22</Card> */}
-                      <Link key={forms.id} href={`/${forms.shareUrl}`}>
-                      <FaEye 
-                      className="text-white size-7 hover:text-green-700" />
+                      <Link target={`/${forms.shareUrl}`} href={`/${forms.shareUrl}`}>
+                        <FaEye
+                          className="text-white size-7 hover:text-green-700" />
                       </Link>
                     </div>
                   </div>
-                  <Button onClick={()=>{
+                  <Button onClick={() => {
                     edit(forms.id)
                   }} variant={"default"} className=' flex gap-2'>
                     Edit  <FaEdit />
@@ -226,7 +229,7 @@ export default function Admin() {
                   <Button onClick={() => {
                     deleteForm(forms.id, session.user.id, forms.publish)
                   }} variant={"destructive"} className=' flex gap-2'>
-                    Delete {loading == forms.id?   <FaSpinner className="animate-spin" /> : <MdDeleteForever/>}
+                    Delete {loading == forms.id ? <FaSpinner className="animate-spin" /> : <MdDeleteForever />}
                   </Button>
                 </div>
               </Card>

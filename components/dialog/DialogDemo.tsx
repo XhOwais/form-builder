@@ -23,8 +23,10 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
 
   const [elemtdata, setElementData] = useState([element.extraAttributes]);
   const [isRequired, setIsRequired] = useState<boolean>(element.extraAttributes.required)
+  const [emailS, setEmail] = useState<boolean>(element.extraAttributes.email)
   console.log(elemtdata)
-  const { label, placeHolder, helperText, required, min, max } = element.extraAttributes;
+  console.log(element.extraAttributes.email)
+  const { label, placeHolder, helperText, required, min, max, email } = element.extraAttributes;
   const form = useForm<Record<string, any>>({
     defaultValues: {
       label: label,
@@ -32,7 +34,8 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
       helperText: helperText,
       required: required,
       min,
-      max
+      max,
+      email: emailS
     }
   });
 
@@ -40,8 +43,8 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
   const { errors, isSubmitting } = formState;
   const { updateElement } = useDesigner();
 
-  function update(values:  Record<string, any>) {
-    const { label, placeHolder, helperText, required, min, max } = values;
+  function update(values: Record<string, any>) {
+    const { label, placeHolder, helperText, required, min, max, email } = values;
     updateElement(element.id, {
       ...element,
       extraAttributes: {
@@ -50,7 +53,8 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
         helperText,
         required: isRequired,
         min,
-        max
+        max,
+        email: emailS
       }
     })
   }
@@ -86,7 +90,8 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
               </Label>
               <Input id="username" defaultValue={helperText} className="col-span-3" {...register("helperText")} />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            {element.type !== 'TextAreaField' && isRequired && (<>
+              <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="username" className="text-right">
                 Min
               </Label>
@@ -98,11 +103,25 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
               </Label>
               <Input id="username" type="number" defaultValue={max} className="col-span-3" {...register("max")} />
             </div>
+            </>)}
             <div className="flex justify-between">
               <Label htmlFor="username" className="text-right">
                 Required
               </Label>
               <div className="flex items-center justify-between space-x-2">
+                {element.type === 'TextField' &&
+                (<>
+                <Label htmlFor="airplane-mode">Email</Label>
+                <Switch
+                  defaultChecked={element.extraAttributes.email}
+                  onCheckedChange={() => {
+                    setEmail(!emailS)
+                  }}
+                  id="airplane-mode"
+                  {...register('email')}
+                />
+                </>)}
+                <Label htmlFor="airplane-mode">Required</Label>
                 <Switch
                   defaultChecked={isRequired}
                   onCheckedChange={() => {
@@ -111,7 +130,6 @@ export function DialogDemo({ element }: { element: CustomInstance }) {
                   id="airplane-mode"
                   {...register("required")}
                 />
-                <Label htmlFor="airplane-mode">Required</Label>
               </div>
             </div>
           </div>

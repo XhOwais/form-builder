@@ -39,7 +39,7 @@ model Form {
   submission Int @default(0)
 
   FormSubmission FormSubmission[]
-  shareUrl       String           @default(uuid())
+  shareUrl       String  @unique   @default(uuid())
 
   @@index([userId])
 }

@@ -9,12 +9,14 @@ import { FaSpinner } from "react-icons/fa";
 import { CustomInstance } from "../fields/TextField";
 import * as z from 'zod';
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function SaveFormBtn({ type, id, formId, publish }: { type: string, id: number, formId: number, publish: boolean }) {
   const { elements } = useDesigner();
   const {data: session} = useSession();
   const [loading, startTransition] = useTransition();
   const [schema, setSchema] = useState();
+  const router = useRouter();
 
   const element = elements as unknown as CustomInstance[];
   
@@ -35,11 +37,16 @@ function SaveFormBtn({ type, id, formId, publish }: { type: string, id: number, 
     try {
       const jsonElements = JSON.stringify(elements);
       console.log(jsonElements)
-      await UpdateForm(jsonElements, parseInt(session?.user.id as string), formId, publish, zodSchema);
+      const formUpdated = await UpdateForm(jsonElements, parseInt(session?.user.id as string), formId, publish, zodSchema);
       toast({
         title: "Success",
         description: "Your form has been saved",
       });
+      if(formUpdated?.id && type === 'Publish'){
+        router.push(`/${formUpdated?.shareUrl}`)
+      } else {
+        router.push('/admin')
+      }
     } catch (error) {
       toast({
         title: "Error",

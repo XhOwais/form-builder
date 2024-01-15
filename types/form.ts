@@ -1,3 +1,4 @@
+import { CustomInstance } from "@/components/fields/TextField";
 import { UseFormRegister } from "react-hook-form";
 
 export type SignValues = {
@@ -27,7 +28,9 @@ export type FormElement = {
         elementInstance: FormElementInstance;
         register: any,
     }>;
-    propertiesComponent: React.FC;
+    propertiesComponent: React.FC<{
+         element: CustomInstance;
+    }>;
 }
 
 export type FieldType = {
