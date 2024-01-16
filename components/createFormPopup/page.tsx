@@ -12,8 +12,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "../ui/textarea"
 import { useForm } from "react-hook-form"
-import { FormCreatetiesSchema, TFormCreatetiesSchema } from "@/utils/Field-properties"
-import { CreateForm } from "@/actions/form"
+import { useAction } from "next-safe-action/hooks"
+import { FormCreateSchema, TFormCreatetiesSchema } from "@/utils/Field-properties"
+import { CreateForm, CreateSaveForm } from "@/actions/form"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useToast } from "../ui/use-toast"
@@ -30,30 +31,60 @@ export function CreateFormPopup() {
       name: "",
       discription: ""
     },
-    resolver: zodResolver(FormCreatetiesSchema)
+    resolver: zodResolver(FormCreateSchema)
   })
   const { register, handleSubmit, formState } = form;
-  const { errors, isSubmitting } = formState;
-
-  async function onSubmit(values: TFormCreatetiesSchema) {
-    if (session?.user.id) {
-      try {
-        const formId = await CreateForm(values, parseInt(session.user.id));
-        toast({
-          title: "Success",
-          description: "Form created successfully",
-        });
+  const { errors } = formState;
+  const { execute, status, result } = useAction(CreateSaveForm, {
+    onSuccess(data) {
+      if (data) {
         form.reset()
-        router.push(`/admin/form-builder/${formId}`);
-      } catch (error) {
+        router.push(`/admin/form-builder/${data}`)
+      } else {
         toast({
           title: "Error",
           description: "Something went wrong, please try again later",
           variant: "destructive",
         });
       }
-    } 
+    },
+    onError(error) {
+      toast({
+        title: "Error",
+        description: `Something went wrong, please try again later ${error}`,
+        variant: "destructive",
+      });
+    }
+  })
+
+  // async function onSubmit(values: TFormCreatetiesSchema) {
+  //   if (session?.user.id) {
+  //     try {
+  //       const formId = await CreateForm(values, parseInt(session.user.id), '');
+  //       toast({
+  //         title: "Success",
+  //         description: "Form created successfully",
+  //       });
+  //       form.reset()
+  //       router.push(`/admin/form-builder/${formId}`);
+  //     } catch (error) {
+  //       toast({
+  //         title: "Error",
+  //         description: "Something went wrong, please try again later",
+  //         variant: "destructive",
+  //       });
+  //     }
+  //   } 
+  // }
+  async function onSubmit(values: TFormCreatetiesSchema) {
+
+    execute({
+      data: values,
+      userId: parseInt(session?.user.id as string),
+      zodValidation: ''
+    })
   }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -83,7 +114,7 @@ export function CreateFormPopup() {
             </div>
           </div>
           <DialogFooter>
-            <Button disabled={isSubmitting} type="submit">Create {isSubmitting && <FaSpinner className="animate-spin ml-4" />}</Button>
+            <Button disabled={status === 'executing'} type="submit">Create {status === 'executing' && <FaSpinner className="animate-spin ml-4" />}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

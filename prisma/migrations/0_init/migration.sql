@@ -25,6 +25,7 @@ CREATE TABLE `Form` (
     `submission` INTEGER NOT NULL DEFAULT 0,
     `shareUrl` VARCHAR(191) NOT NULL,
 
+    UNIQUE INDEX `Form_shareUrl_key`(`shareUrl`),
     INDEX `Form_userId_idx`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

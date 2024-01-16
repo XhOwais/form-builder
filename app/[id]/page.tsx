@@ -16,37 +16,37 @@ export default function FormPrview(params: any) {
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<any>();
 
+  let dataFetched = false;
+  const formId = params.params.id;
+
+
   useEffect(() => {
-    setLoading(true);
-    const formId = params.params.id;
-
-    let dataFetched = false;
-
-    const formData = async () => {
-      if (!dataFetched) {
-        try {
-          const res = await GetForm(formId);
-          setData(res);
-          setFormId(res?.id);
-
-          if (res?.content) {
-            const elementsData = await JSON.parse(res?.content);
-            setElements(elementsData);
-          } else {
-            setElements([]);
-          }
-
-          dataFetched = true;
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
 
     formData();
-  }, [params.params.id]);
+  }, [formId]);
+
+  const formData = async () => {
+    if (!dataFetched) {
+      try {
+        const res = await GetForm(formId);
+        setData(res);
+        setFormId(res?.id);
+
+        if (res?.content) {
+          const elementsData = await JSON.parse(res?.content);
+          setElements(elementsData);
+        } else {
+          setElements([]);
+        }
+
+        dataFetched = true;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
 
   const combinedObject = elements.reduce((acc: Record<string, any>, element) => {
@@ -78,37 +78,45 @@ export default function FormPrview(params: any) {
       TextField: () => {
         const baseSchema = z.string();
         const baseSchemawithLimit = baseSchema.min(min).max(max);
+        const basewithMin = baseSchema.min(min);
+        const basewithMax = baseSchema.max(max);
 
-        return required && min !== 0 && max >= 1
-          ? (element.extraAttributes.email ? baseSchemawithLimit.email() : baseSchemawithLimit)
-          : required
-            ? baseSchema.min(1, 'This Field is Required!')
-            : element.extraAttributes.email
-              ? baseSchema.email().optional()
-              : baseSchema.optional();
+        return !required 
+        ? baseSchema.optional() 
+        : required && min !== 0 && max >= 1
+          ? baseSchemawithLimit
+          : required && min !== 0 && minI !== ''
+            ? basewithMin
+            : required && max >= 1 && maxI !== ''
+              ? basewithMax
+              : required && element.extraAttributes.email
+                ? baseSchema.email()
+                : element.extraAttributes.email
+                  ? baseSchema.email()
+                  : baseSchema.min(1, 'This Field is Required!');
       },
       NumField: () => {
         const baseSchema = z.string();
         const basewithLimit = baseSchema.min(min).max(max);
         const basewithMin = baseSchema.min(min);
         const basewithMax = baseSchema.max(max);
-        console.log( typeof min, min)
-        return !required 
-        ? baseSchema 
-        : ( required && min !== 0 && max >= 1 
-          ? basewithLimit
-          : required && min !== 0 && minI !== ''
-            ? basewithMin
-            : required && max >= 1 && maxI !== ''
-              ? basewithMax
-              : baseSchema.min(1, 'This Field is Required!'));
+        console.log(typeof min, min)
+        return !required
+          ? baseSchema
+          : (required && min !== 0 && max >= 1
+            ? basewithLimit
+            : required && min !== 0 && minI !== ''
+              ? basewithMin
+              : required && max >= 1 && maxI !== ''
+                ? basewithMax
+                : baseSchema.min(1, 'This Field is Required!'));
       },
       TextAreaField: () => {
         const baseSchema = z.string();
 
         return !required
-        ? baseSchema.optional()
-        : baseSchema.min(1, 'This Field is Required!')
+          ? baseSchema.optional()
+          : baseSchema.min(1, 'This Field is Required!')
       },
     };
 

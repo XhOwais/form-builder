@@ -1,11 +1,15 @@
 "use server"
 
-import { TFormCreatetiesSchema } from "@/utils/Field-properties";
-import { PrismaClient } from "@prisma/client"
+import { FormCreateSchema, SchemaForFormCreate, TFormCreatetiesSchema } from "@/utils/Field-properties";
+import { PrismaClient } from "@prisma/client";
+import {createSafeActionClient} from 'next-safe-action'; 
+import * as z from 'zod';
 import { json } from "stream/consumers";
-import { boolean } from "zod";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
+const action = createSafeActionClient();
+
 
 export async function CreateForm(data: TFormCreatetiesSchema, userId: number, zodValidation: any) {
 
@@ -28,6 +32,23 @@ export async function CreateForm(data: TFormCreatetiesSchema, userId: number, zo
         return
     }
 }
+export const CreateSaveForm = action(SchemaForFormCreate, async({data, userId, zodValidation})=> {
+
+    const {name, discription} = data;
+
+        const form = await prisma.form.create({
+            data: {
+                userId,
+                name,
+                discription,
+                content: '',
+                zodValidation: ''
+            }
+        })
+
+        if(!form.id) return {error: 'Could not create Form'}
+        if(form.id) return form.id
+})
 
 export async function UpdateForm(content: string, userId: number, formId: number, publish: boolean, zodSchema: any) {
 
@@ -146,9 +167,11 @@ export async function FormDelete(id: number, userId: number, publish: boolean) {
                 id,
             },
         })
-        const formsRetun = GetUserForm(userId, publish);
+        const formsRetun = await GetUserForm(userId, publish);
+
         return formsRetun
     } catch (error) {
+        console.log(error)
         return
     }
 }

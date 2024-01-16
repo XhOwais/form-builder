@@ -10,16 +10,15 @@ export const propertiesSchema = z.object({
 
 export type TFIeldPropSchema = z.infer<typeof propertiesSchema>
 
-export const FormCreatetiesSchema = z.object({
+export const FormCreateSchema = z.object({
   name: z.string().min(4, "name must have than 4 characters"),
   discription: z.string().optional()
 })
 
-// export const generateValidation = (obj: FormElementInstance[])=> {
-//   return (obj.reduce((acc, element) => {
-//     acc[element.extraAttributes?.label] = z.string().email();
-//     return acc;
-//   }, {}))
-// }
-// console.log(generateValidation)
-export type TFormCreatetiesSchema = z.infer<typeof FormCreatetiesSchema>
+export type TFormCreatetiesSchema = z.infer<typeof FormCreateSchema>
+
+export const SchemaForFormCreate = z.object({
+  data: FormCreateSchema,
+  userId: z.number(),
+  zodValidation: z.any()
+});

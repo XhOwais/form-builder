@@ -16,6 +16,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { HiCursorClick } from "react-icons/hi";
 import { TbArrowBounce } from "react-icons/tb";
 import { FaEye } from "react-icons/fa";
+import { Skeleton } from '@/components/ui/skeleton'
 
 
 export default function Admin() {
@@ -46,11 +47,12 @@ export default function Admin() {
   const deleteForm = async (id: number, userId: string, publish: boolean) => {
     setLoading(id)
     const res = await FormDelete(id, parseInt(userId), publish);
-    if (publish) {
+    if (publish && res !== undefined) {
       setPublishedForm(res)
       setLoading(null)
-    } else {
-      setDraftedForm(res)
+    } 
+    if(!publish && res !== undefined) {
+        setDraftedForm(res)
     }
     setLoading(null)
   }
@@ -143,7 +145,7 @@ export default function Admin() {
             <CardDescription>Deploy your new project in one-click.</CardDescription>
           </CardHeader>
           <div className=' px-4 flex flex-col justify-center gap-3'>
-            {publishedForm?.slice(0, 3).map((forms) => (
+            {publishedForm !== undefined ? publishedForm?.slice(0, 3).map((forms) => (
               <Card className=' w-full h-20 bg-[#000000ba] flex justify-between' key={forms.id}>
                 <CardHeader>
                   <CardTitle className=' text-white'>{forms.name}</CardTitle>
@@ -183,7 +185,7 @@ export default function Admin() {
                   </Button>
                 </div>
               </Card>
-            ))}
+            )) : (<Skeleton className=' w-full h-[200px] flex justify-center items-center'/>)}
           </div>
         </Card>
 
@@ -196,7 +198,7 @@ export default function Admin() {
             <CardDescription>Deploy your new project in one-click.</CardDescription>
           </CardHeader>
           <div className=' px-4 flex flex-col justify-center gap-3'>
-            {draftedForm?.slice(0, 3).map((forms) => (
+            {draftedForm !== undefined ? draftedForm?.slice(0, 3).map((forms) => (
               <Card className=' w-full h-20 bg-[#000000ba] flex justify-between' key={forms.id}>
                 <CardHeader>
                   <CardTitle className=' text-white'>{forms.name}</CardTitle>
@@ -233,7 +235,7 @@ export default function Admin() {
                   </Button>
                 </div>
               </Card>
-            ))}
+            )) : (<Skeleton className=' w-full h-[200px] flex justify-center items-center'/>)}
           </div>
         </Card>
 

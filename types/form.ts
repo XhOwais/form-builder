@@ -61,6 +61,5 @@ export type Form =
         submission: number;
         shareUrl: string;
     }
-export type Forms =
-    Form[]
+export type Forms = Form[]
     
